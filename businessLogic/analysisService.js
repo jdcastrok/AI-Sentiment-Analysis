@@ -1,8 +1,7 @@
 var analysisRepository = require('../dataAccess/analysisRepository.js'); 
 
-exports.analyzeText = function(aRequest, aResponse) {
-  
-  analysisRepository.getOneMethod(aRequest.params, function(data){
-        aResponse.send(data);
+exports.analyzeText = function(params, callback) {
+  analysisRepository.getOneMethod(params, function(data){
+        callback(data);
     });
 };
