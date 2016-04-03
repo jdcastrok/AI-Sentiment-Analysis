@@ -54,7 +54,7 @@ var filterByFrequency = function(positiveHistoric, negativeHistoric, alpha, newP
 };
 
 //Actualiza los modelos
-var updateModel = function(posModel, negModel){
+var updateModel = function(posModel, negModel, callback){
   var jsonModel = {pos:posModel,neg:negModel};
   dataAccess.updateModels(jsonModel,function(response){
     if (response.success) {
@@ -63,9 +63,6 @@ var updateModel = function(posModel, negModel){
       //ERROR
     }
   });
-    console.log(posModel);
-    console.log(" -------------------");
-    console.log(negModel);
 };
 
 //Controla los procesos de generar los modelos
@@ -88,7 +85,7 @@ exports.startGenModel(callback){
     var negModel = [];
 
     genModel(historical,positive, negative, posModel, negModel, function(posModel, negModel){
-      updateModel(posModel, negModel);
+      updateModel(posModel, negModel, callback);
     });
   });
 
