@@ -1,5 +1,5 @@
 bodyParser = require('body-parser');
-var analysisService = require('./businessLogic/analysisService.js');
+var analysisController = require('./controllers/analysisController.js');
 
 //-------------------------------------------------------------------------
 var express       = require('express'),
@@ -30,7 +30,7 @@ app.use('/sentiment-analysis', express.static(__dirname + '/app'));
 
 //Start: Routing
 //devuleve un usuario por medio del ID
-app.get('/analyzeText/:data', analysisService.analyzeText);
+app.get('/analyzeText/:data', analysisController.analyzeText);
 
 //End: Routing
 
