@@ -1,16 +1,13 @@
 var connection = require('./connection.js');
 
-exports.getOneMethod = function(data, callback){
-	callback({prueba: 'exitosa'});
-	return;
-	var queryParams = {
-		query: {},
-		collection: 'collectionName'
+exports.getStopWords = function(callback){
+	var httpConfig = {
+		//uri: 'http://ai.durancr.com:9000/sentimentAnalysis/v1/getCollection/',
+		uri: 'http://localhost:9000/sentimentAnalysis/v1/getCollection/',
+		method: 'GET'
+	}; 
+	var httpData = {
+		'collection': 'stopWords'
 	};
-	dbConnection.findOneDocument(
-		queryParams, 
-		function(res){
-			callback(res);
-		}
-	);
+	connection.httpRequest(httpConfig, httpData, callback);
 };
