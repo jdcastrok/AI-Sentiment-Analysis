@@ -13,3 +13,9 @@ exports.updateHistoricals = function(data,callback) {
 exports.restoreBackup = function(collections,callback) {
   callback({'resultCode':200});
 };
+
+exports.getHistorical = function(callback){
+};
+
+exports.updateModels = function(data,callback){
+};
