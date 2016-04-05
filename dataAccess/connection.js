@@ -10,11 +10,12 @@ exports.httpRequest = function(config, data, callback){
 
         data // json con la información a enviar
     */
-
+    console.log('httpRequest: data');
+    console.log(data);
     request({
       uri: config.uri,
       method: config.method,
-      form: { data }
+      form: data
     }, function(error, res, data) {
       if(error){
         callback({
