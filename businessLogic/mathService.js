@@ -1,3 +1,6 @@
+exports.Zc95_pos = 1.96;
+exports.Zc95_neg = -1.96;
+
 exports.updateModels = function(callback) {
   callback({'resultCode':200});
 }
@@ -22,6 +25,13 @@ exports.getPercentilvalue = function(array,nPer,nPerToTake){
   }
   return Math.abs(num/nPer*nPerToTake);
 };
+
+//Recibe proporción 1, proporción 2, total 1, total 2
+//Retorna un valor Z observado para la distribución X2
+exports.zObs = function(p1, p2, n1, n2){
+    var obs = (p1-p2) / Math.sqrt((  (p1*(1-p1))/n1  )+(  (p2*(2-p1))/n2  ));
+    return obs;
+}
 
 //Recibe un arreglo ordenado decendente y un numero num
 //Devuelve un modelo
