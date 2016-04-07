@@ -1,17 +1,18 @@
 exports.getStopWords = function(callback) {
-  callback([{'word':'hehe'},{'word':'my'},{'word':'lol'}]);
+  callback({success: true, data: [{'word':'hehe'},{'word':'my'},{'word':'lol'}]});
 };
 
-exports.createBackup = function(collections,callback) {
-  callback({'resultCode':200});
+exports.lockLearningProcess = function(callback) {
+  callback({success: true});
 };
 
 exports.updateHistoricals = function(data,callback) {
+  console.log(data);
   callback({'resultCode':200});
 };
 
-exports.restoreBackup = function(collections,callback) {
-  callback({'resultCode':200});
+exports.unlockLearningProcess = function(status,callback) {
+  callback({success: true});
 };
 
 exports.getHistorical = function(callback){

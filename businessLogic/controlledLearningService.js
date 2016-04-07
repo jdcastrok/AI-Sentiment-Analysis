@@ -4,6 +4,7 @@ var util = require('util');
 var dataAccess = require('../dataAccess/learningRepository.js');
 var utilitiesService = require('./utilitiesService.js');
 var mathService = require('./mathService.js');
+var genModel = require('./genModelLearningService.js')
 
 exports.learn = function(request, callback) {
   var textsArray = request.texts;
@@ -29,15 +30,23 @@ exports.learn = function(request, callback) {
           dataAccess.updateHistoricals(sentimentWords, function (response) {
             //si se pudo actualizar exitosamente
             if (response.sucess) {
-              mathService.updateModels(function(response) {
-                dataAccess.unlockLearningProcess({result : 'sucess'});
-                callback(response);//se supone que updateModels hizo todo lo demás para manejar errores
+              //se ejecuta la generación de colecciones modelo
+              genModel.startGenModel(function(response) {
+                if (response.success) {
+                  dataAccess.unlockLearningProcess({success: true}, function (response) {
+                    callback(response);//se supone que updateModels hizo todo lo demás para manejar errores
+                  });
+                } else {
+                  //que pasa si falla la generacion de las colecciones modelo?
+                }
               });
             } else {
               //falló algo al actualizar los históricos
-              dataAccess.unlockLearningProcess({result : 'failed'});
+              dataAccess.unlockLearningProcess({success: false}, function(response) {
+                callback(response);
+              });
             }
-          }); //es necesario aquí???
+          });
         } else {
           //no se pudieron traer las stopWords
         }
