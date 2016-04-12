@@ -53,7 +53,7 @@ exports.groupByOcurrences = function(words) {
       }
     }
     if (j == groupedWords.length) {
-      groupedWords[j] = {'word' : word, 'ocur' : 1};
+      groupedWords[j] = {"word" : word, "ocur" : 1};
     }
   }
 
@@ -71,7 +71,7 @@ exports.groupBySentiment = function(currentWords, wordsToAdd) {
       }
     }
     if (j == currentWords.length) {
-      currentWords[j] = {'word' : word.word, 'ocur' : word.ocur};
+      currentWords[j] = {"word" : word.word, "ocur" : word.ocur};
     }
   }
 

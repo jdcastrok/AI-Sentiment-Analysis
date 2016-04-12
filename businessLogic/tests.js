@@ -1,8 +1,11 @@
 'use strict'
 
-var learning = require('./controlledLearningService.js');
+var controlled = require('./controlledLearningService.js');
+var autonomous = require('./autonomousLearningService.js');
 
-learning.learn(
+autonomous.learn(function(response) {if (response.success) {console.log("bien")} else {console.log("mal")}});
+/*
+var foo = controlled.learn(
   //texts
   {texts:[
     {text: "todo el mundo debe ser feliz :)", sent: 'pos'},
@@ -19,7 +22,7 @@ learning.learn(
     {text: "prueba de sentimiento positivo", sent: 'pos'},
     {text: "adios mundo cruel", sent: 'neg'}]},
   //callback
-  function(response) {if (response.success) {console.log("bien")} else {console.log("mal")}});
+  function(response) {if (response.success) {console.log("bien")} else {console.log("mal")}});*/
 
 
 
