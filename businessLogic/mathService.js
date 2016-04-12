@@ -35,7 +35,7 @@ exports.zObs = function(p1, p2, n1, n2){
 
 //Recibe un arreglo ordenado decendente y un numero num
 //Devuelve un modelo
-exports.percentilSum = function(array,num){
+exports.percentilSum = function(array,num){ //acá se cae en la línea 44, xq los arreglos llegan vacíos, así se definen en startGenModel
   var newArray=[];
   var sum = 0;
   var i = 0;

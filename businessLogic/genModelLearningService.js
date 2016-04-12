@@ -7,9 +7,12 @@ var mathService = require('./mathService.js');
 var getHistorical = function(callback){
   dataAccess.getHistorical(function(response){
     if(response.success){
-        callback(historical);
+      var historical = response.data;
+      console.log(historical);
+      callback(historical);
     }else{
       //ERROR
+      console.log("falló");
     }
   });
 };
