@@ -7,12 +7,19 @@ var mathService = require('./mathService.js');
 var getHistorical = function(callback){
   dataAccess.getHistorical(function(response){
     if(response.success){
-        callback(historical);
+      var historical = response.data;
+      console.log(historical);
+      callback(historical);
     }else{
       //ERROR
+      console.log("falló");
     }
   });
 };
+
+//
+
+
 
 //Recibe las colecciones historicas, un numero alpha y dos arreglos vacios
 //Devuelve en cada arreglo las palabras mas representaivas de cada coleccion
@@ -21,12 +28,17 @@ var filterByFrequency = function(positiveHistoric, negativeHistoric, alpha, newP
   var flagWordFound, ocurHistoric, ocurObserved;
   ocurHistoric = mathService.getOcurrency(positiveHistoric);
   ocurObserved = mathService.getOcurrency(negativeHistoric);
+  var p1;
+  var p2;
     for (var i = 0; i < positiveHistoric.length; i++) {
       flagWordFound = false;
       for (var j = 0; j < negativeHistoric.length; j++) {
         if(positiveHistoric[i].word == negativeHistoric[j].word){
-          if( Math.abs((positiveHistoric[i].ocur/ocurHistoric) - (negativeHistoric[j].ocur/ocurObserved)) > alpha){
-            if((positiveHistoric[i].ocur/ocurHistoric) > (negativeHistoric[j].ocur/ocurObserved)){
+          p1 = positiveHistoric[i].ocur/ocurHistoric;
+          p2 = negativeHistoric[j].ocur/ocurObserved;
+          var zObs = mathService.zObs(p1, p2, ocurHistoric, ocurObserved);
+          if(zObs<mathService.Zc95_neg || zObs>mathService.Zc95_pos){
+            if((p1) > (p2)){
               newPositive.push({word:positiveHistoric[i].word,ocur:positiveHistoric[i].ocur});
             }else {
               newNegative.push({word:negativeHistoric[i].word,ocur:negativeHistoric[i].ocur});
@@ -77,7 +89,7 @@ var genModel = function(historical,positive, negative, posModel, negModel, callb
 
 
 //Inicia el proceso de generar el modelo
-exports.startGenModel(callback){
+exports.startGenModel = function(callback){
   getHistorical(function(historical){
     var positive=[];
     var negative=[];

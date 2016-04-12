@@ -53,7 +53,7 @@ exports.groupByOcurrences = function(words) {
       }
     }
     if (j == groupedWords.length) {
-      groupedWords[j] = {'word' : word, 'ocur' : 1};
+      groupedWords[j] = {"word" : word, "ocur" : 1};
     }
   }
 
@@ -71,9 +71,23 @@ exports.groupBySentiment = function(currentWords, wordsToAdd) {
       }
     }
     if (j == currentWords.length) {
-      currentWords[j] = {'word' : word.word, 'ocur' : word.ocur};
+      currentWords[j] = {"word" : word.word, "ocur" : word.ocur};
     }
   }
 
   return currentWords;
+}
+
+//Recibe dos arreglos y devuelve las palabras que se encuentran en ambos
+exports.wordsIntersect = function(array1, array2){
+  var newArray = [];
+  for (var i = 0; i < array1.length; i++) {
+    for (var j = 0; j < array2.length; j++) {
+      if(array1[i].word == array2[j].word){
+        newArray.push(array1[i]);
+        break;
+      }
+    }
+  }
+  return newArray;
 }
