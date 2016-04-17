@@ -6,7 +6,7 @@ exports.Zc95_neg = -1.96;
 exports.getOcurrencySum = function(array){
   var num=0;
   for (var i = 0; i < array.length; i++) {
-    num+=array[i].occurrences;
+    num+=array[i].occur;
   }
   return num;
 };
@@ -18,9 +18,9 @@ exports.getPercentilValue = function(array, nPer, nPerToTake){
   var num=0;
   var limit = array.length;
   for (var i = 0; i < limit; i++) {
-    num += array[i].occurrences;
+    num += array[i].occur;
 
-  } 
+  }
  console.log('getPercentilValue: console.log(limit);');
   console.log(limit);
   console.log('getPercentilValue: console.log(num);');
@@ -33,4 +33,12 @@ exports.getPercentilValue = function(array, nPer, nPerToTake){
 exports.getZobs = function(p1, p2, n1, n2){
     var obs = (p1-p2) / Math.sqrt((  (p1*(1-p1))/n1  )+(  (p2*(2-p1))/n2  ));
     return obs;
+}
+
+exports.sortCollection = function(collection) {
+  collection.sort(function(a, b){
+    return (a.occur < b.occur) ? 1 : (a.occur > b.occur) ? -1 : 0;
+  });
+
+  return collection;
 }
