@@ -3,9 +3,27 @@ var sentimentRepository = require('../dataAccess/sentimentRepository.js');
 var utilitiesService = require('./utilitiesService.js');
 
 
-
 /*
-<<<<<<< HEAD
+//-------------------------------------------------------------------------------------------------------------------
+var genModelLearningService = require('./genModelLearningService.js');
+ejecución de ejemplo
+genModelLearningService.generateModel({
+                                                                                "pos": [
+                                                                                              {"word": "fine", "occurrences": 651}, {"word": "good", "occurrences": 465}, 
+                                                                                              {"word": "better", "occurrences": 324}, {"word": "great", "occurrences": 312},
+                                                                                              {"word": "awesome", "occurrences": 123}, {"word": "greater", "occurrences": 95},
+                                                                                               {"word": "best", "occurrences": 21}, {"word": "champion", "occurrences": 16}],
+                                                                                "neg" : [
+                                                                                              {"word": "fine", "occurrences": 6125}, {"word": "good", "occurrences": 5454}, 
+                                                                                              {"word": "better", "occurrences": 3212}, {"word": "bad", "occurrences": 2315},
+                                                                                              {"word": "unlucky", "occurrences": 984}, {"word": "unborn", "occurrences": 512}, 
+                                                                                              {"word": "unkonwn", "occurrences": 256}, {"word": "loser", "occurrences": 98}]
+                                                                        },
+                                                                        function (res) {
+                                                                          console.log('genModelLearningService.generateModel: console.log(res);');
+                                                                          console.log(res);
+                                                                        });
+//-------------------------------------------------------------------------------------------------------------------
 //ejecución de ejemplo
 sentimentRepository.getStopWords(function (res) {
   console.log('sentimentRepository.getStopWords:');
@@ -16,8 +34,8 @@ sentimentRepository.getStopWords(function (res) {
 sentimentRepository.updateKnowledgeDB(
     'Model',
     {
-      "pos": [{"word": "casa", "ocurrences": 243},{"word": "verdad1", "ocurrences": 4}],
-      "neg": [{"word": "inundación", "ocurrences": 34}, {"word": "problema8", "ocurrences": 1534}]
+      "pos": [{"word": "casa", "occurrences": 243},{"word": "verdad1", "occurrences": 4}],
+      "neg": [{"word": "inundación", "occurrences": 34}, {"word": "problema8", "occurrences": 1534}]
     }, 
     function (res) {
       console.log('sentimentRepository.updateKnowledgeDB: Model');
@@ -28,8 +46,8 @@ sentimentRepository.updateKnowledgeDB(
 sentimentRepository.updateKnowledgeDB(
     'Historical',
     {
-      "pos": [{"word": "casa", "ocurrences": 243},{"word": "verdad1", "ocurrences": 4}],
-      "neg": [{"word": "inundación", "ocurrences": 34}, {"word": "problema8", "ocurrences": 1534}]
+      "pos": [{"word": "casa", "occurrences": 243},{"word": "verdad1", "occurrences": 4}],
+      "neg": [{"word": "inundación", "occurrences": 34}, {"word": "problema8", "occurrences": 1534}]
     }, 
     function (res) {
       console.log('sentimentRepository.updateKnowledgeDB: Historical');
@@ -48,7 +66,7 @@ sentimentRepository.getKnowledgeDB('Model', function (res) {
 });
 */
 
-
+/*
 exports.analyzeText = function(request, callback){
   var textsArray = request.texts;
   dataAccess.getStopWords(function (response) {
@@ -80,6 +98,7 @@ exports.analyzeText = function(request, callback){
   });
 }
 
+*/
 /*
 var test = function(request){
   var response = {data:[{word:'nh'}]};
