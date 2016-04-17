@@ -77,7 +77,11 @@ exports.getKnowledgeDB = function(knowledgeType, callback){
 					function (res) {
 						if (res.success) {
 							knowledgeDB.neg = res.data;
-							callback(knowledgeDB);
+							callback({
+								"success": true,
+								"data": knowledgeDB,
+								"message": 200
+							});
 						} else {
 							callback(res);
 						}
