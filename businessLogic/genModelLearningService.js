@@ -15,7 +15,7 @@ Devuelve colecciones modelo. Aquellas palabras mutuamente excluyentes
 }
 */
 var filterByFrequency = function(historicalKnowledge){
-      var totalPositiveHistoricalOccurrences, 
+      var totalPositiveHistoricalOccurrences,
             totalNegativeHistoricalOccurrences,
             positiveProportion,
             negativeProportion,
@@ -28,8 +28,8 @@ var filterByFrequency = function(historicalKnowledge){
               for (var j = 0; j < historicalKnowledge.neg.length; j++) {
                     if(historicalKnowledge.pos[i].word == historicalKnowledge.neg[j].word){
                           console.log(historicalKnowledge.pos[i].word);
-                          positiveProportion = historicalKnowledge.pos[i].occurrences / totalPositiveHistoricalOccurrences;
-                          negativeProportion = historicalKnowledge.neg[j].occurrences / totalNegativeHistoricalOccurrences;
+                          positiveProportion = historicalKnowledge.pos[i].occur / totalPositiveHistoricalOccurrences;
+                          negativeProportion = historicalKnowledge.neg[j].occur / totalNegativeHistoricalOccurrences;
                           console.log('filterByFrequency: console.log(positiveProportion);');
                           console.log(positiveProportion);
                           console.log('filterByFrequency: console.log(negativeProportion);');
@@ -76,7 +76,7 @@ var getMostRepresentativeWords = function(wordsArray, maxOccurrences){
               //console.log('getMostRepresentativeWords: while: console.log(representativeWords);');
               //console.log(representativeWords);
 
-              sumOccurrences += wordsArray[i].occurrences;
+              sumOccurrences += wordsArray[i].occur;
               i++;
       }
       return representativeWords;
@@ -96,6 +96,17 @@ Devuelve colecciones modelo. Aquellas palabras más representativas y mutuamente
 }
 */
 exports.generateModel = function(historicalKnowledge, callback){
+      //console.log("unsorted Historical\n\n");
+      //console.log(require('util').inspect(historicalKnowledge, { depth: null }));
+      //console.log("\n\n_______________________\n\n");
+
+      historicalKnowledge.pos = mathService.sortCollection(historicalKnowledge.pos);
+      historicalKnowledge.neg = mathService.sortCollection(historicalKnowledge.neg);
+
+      //console.log("unsorted Historical\n\n");
+      //console.log(require('util').inspect(historicalKnowledge, { depth: null }));
+      //console.log("\n\n_______________________\n\n");
+
       var modelKnowledge = {
                                                       "pos": [],
                                                       "neg": []
@@ -118,5 +129,7 @@ exports.generateModel = function(historicalKnowledge, callback){
 
       modelKnowledge = filterByFrequency(modelKnowledge);                      //discrimina aquellas que se repitan y tengan una frecuencia "igual"
 
-      callback(modelKnowledge);
+      //console.log(modelKnowledge);
+
+      callback({"success" : true, "data" : modelKnowledge, "status" : 200});
 };
