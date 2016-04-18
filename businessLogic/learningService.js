@@ -57,7 +57,7 @@ exports.learn = function (request, callback) {
 function autonomousLearn(callback) {
   //debería bloquearse la BD
 
-  dataAccess.getPendingToLearnWords( function (response) {
+  dataAccess.getLearningQueue (function (response) {
     //se obtienen las palabras por aprender
     if (response.success) {
       var sentimentWords = {"neg" : [], "pos" : []};
@@ -78,7 +78,17 @@ function autonomousLearn(callback) {
       commonLearning(sentimentWords, function (response) {
         if (response.success) {
           //todo bien
-          callback(response);
+          //vacío la colección learningQueue
+          dataAccess.updateLearningQueue(function (response) {
+            console.log(response);
+            if (response.success) {
+              //se limpió con éxito
+              callback(response);
+            } else {
+              //falló
+              callback(response);
+            }
+          })
         } else {
           //todo mal
           callback(response);
@@ -140,11 +150,12 @@ function commonLearning(newWords, callback) {
       var historicals = updateHistoricals(response.data, newWords);
       //se generan las colecciones modelo
       genModel.generateModel(historicals, function (response) {
-        console.log(response);
+        //console.log(response);
         if (response.success) {
           //las colecciones modelo se generaron correctamente
           //se busca actualizar ambas
           updateDB(historicals, response.data, function (response) {
+            console.log(response);
             if (response.success) {
               //se actualizaron exitosamente las colecciones
               callback(response);
