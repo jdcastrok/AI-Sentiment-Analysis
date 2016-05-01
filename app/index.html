@@ -1,34 +1,26 @@
-<!Doctype html>
-<html class="no-js">
-  <head>
-    <meta charset="utf-8">
-    <title>X²ntiment Analysis</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="common/styles/css/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="common/styles/css/angular-ui-notification/angular-ui-notification.min.css">
-  </head>
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8"></meta>
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="libs/materialize/css/materialize.min.css"  media="screen,projection"/>
 
-  <body ng-app="SAApp">
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <title>X²ntiment Analysis</title>
+    </head>
 
-    <div class="">
-      <div ui-view></div>
-    </div>
+    <body>
 
-    <!--Load libs-->
-    <script src="common/libs/angular-1.4.8/angular.js"></script>
-    <script src="common/libs/ui-router/release/angular-ui-router.js"></script>
-    <script src="common/libs/angular-ui-notification/angular-ui-notification.min.js"></script>
+      <div id="main">
+        Loding page...
+      </div>
+      <!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="libs/materialize/js/materialize.min.js"></script>
 
-    <script src="./app.js"></script>
-
-    <!--Load services-->
-    <script src="common/services/request-service.js"></script>
-    <script src="common/services/notification-service.js"></script>
-    <script src="common/services/message-handler-service.js"></script>
-
-    <!--Load controllers-->
-
-
-  </body>
-</html>
+      <script src="./dist/app.js"></script>
+    </body>
+  </html>
+        
