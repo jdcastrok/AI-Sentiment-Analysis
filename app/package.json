@@ -1,0 +1,22 @@
+{
+  "name": "xintimentAnalysis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "watch": "watchify -v -d -t [ reactify --es6 ] main.js -o ./dist/app.js",
+    "build": "NODE_ENV=production browserify -t [ reactify --es6 ] main.js | uglifyjs > ./dist/app.js"
+  },
+  "author": "ajdurancr",
+  "license": "",
+  "dependencies": {
+    "react": "^0.13.2"
+  },
+  "devDependencies": {
+    "browserify": "^9.0.8",
+    "reactify": "^1.1.0",
+    "uglify-js": "^2.4.20",
+    "watchify": "^3.1.2"
+  }
+}
