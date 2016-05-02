@@ -7,6 +7,19 @@ var TextQueue = React.createClass({
   		textCollection: this.props.textCollection
   	}
   },
+  removeFromQueue(textItemId){
+  	var tempCollection = this.state.textCollection;
+  	tempCollection.splice(textItemId, 1);
+	this.setState({
+		textCollection: tempCollection
+		
+	});
+		
+
+ },
+ analyzeText(){
+ 	
+ },
   render(){
 	return (
 		<div>
@@ -17,7 +30,7 @@ var TextQueue = React.createClass({
 		  			<br></br>
 			    	</li>
 			    	<li className="collection-item avatar">
-			    		<CustomTextCollection textCollection={this.state.textCollection}/>
+			    		<CustomTextCollection textCollection={this.state.textCollection} onClick={this.removeFromQueue}/>
 			    	</li>
 			</ul>
 			

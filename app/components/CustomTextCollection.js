@@ -1,5 +1,6 @@
 
-var React = require('react');
+var React = require('react'),
+CustomTextCollectionItem = require('./CustomTextCollectionItem');
 
 var CustomTextCollection = React.createClass({
 
@@ -10,12 +11,10 @@ var CustomTextCollection = React.createClass({
   },
 
   render(){
-  	var textItems = this.state.textCollection.map(function (textItem) {
-  		return (<li key={textItem.text} className="collection-item avatar">
-  			<i className="circle light-green">1</i>
-  			<p>{textItem.text}</p>
-		      	<a href="#!" className="secondary-content"><i className="material-icons tooltipped" data-position="bottom" data-delay="50" data-tooltip="Remove from queue">delete</i></a>
-	    	</li>)
+            var self = this;
+  	     var textItems = this.state.textCollection.map(function (textItem) {
+                var itemId = self.state.textCollection.indexOf(textItem);
+  		    return (<CustomTextCollectionItem key={itemId} text = {textItem} itemId ={itemId} onClick={self.props.onClick} />)
   	});
 	return (
 		<ul className="collection ">
