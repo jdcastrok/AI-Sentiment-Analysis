@@ -40,20 +40,110 @@ res:{
 */
 
 exports.analyzeText = function(data, callback){
-      sentimentRepository.getStopWords(function (res) {
-            if (res.success) {
-              var stopWords = res.data;
-                    sentimentRepository.getKnowledgeDB('Model', function (res) {
-                          if (res.success) {
-                                  var modelKnowledge = res.data;
-                                  //proceso de evaluación
-                                  // ...
-                          } else {
-                                callback(res);
-                          }
-                    });
-            } else {
-                    callback(res);
-            }
+  sentimentRepository.getStopWords(function (res) {
+    if (res.success) {
+      var stopWords = res.data;
+      sentimentRepository.getKnowledgeDB('Model', function (res) {
+        if (res.success) {
+          var modelKnowledge = res.data;
+          //proceso de evaluación
+          // ...
+
+          //console.log(require('util').inspect(modelKnowledge, { depth: null }));
+
+          for (var i = 0; i < data.texts.length; i++) {
+            var wordOccurrences = utilitiesService.groupByOccurrences(utilitiesService.removeStopWords(utilitiesService.tokenize(data.texts[i].text),stopWords));
+
+            var observedCollections = generateObserved(wordOccurrences, modelKnowledge);
+            var expectedCollections = generateExpected(wordOccurrences, modelKnowledge);
+
+            console.log(require('util').inspect(observedCollections, { depth: null }));
+            console.log(require('util').inspect(expectedCollections, { depth: null }));
+          }
+        } else {
+          callback(res);
+        }
       });
+    } else {
+      callback(res);
+    }
+  });
 };
+
+function generateObserved(wordOccurrences, modelKnowledge) {
+  /*
+    tengo una lista de palabras encontradas en el texto y su respectivo numero de apariciones,
+    tengo un modelo de palabras positivas,
+    tengo un modelo de palabras negativas,
+    por cada una de esas palabras,
+      si la palabra se encuentra en el modelo positivo,
+        agrego a palabras observadas positivas
+      si se encuentra en el modelo negativo,
+        agrego a palabras negativas
+      si no,
+        continúo
+    retorno ambas listas de palabras observadas
+  */
+  var observedCollections = {"pos" : [] , "neg" : []};
+
+  var positiveModel = [];
+  var negativeModel = [];
+
+  for (var i = 0; i < modelKnowledge.pos.length; i++) {
+    positiveModel.push(modelKnowledge.pos[i].word);
+  }
+
+  for (var i = 0; i < modelKnowledge.neg.length; i++) {
+    negativeModel.push(modelKnowledge.neg[i].word);
+  }
+
+  for (var i = 0; i < wordOccurrences.length; i++) {
+    if (positiveModel.indexOf(wordOccurrences[i].word) > -1) {
+      observedCollections.pos.push(wordOccurrences[i]);
+    } else if (negativeModel.indexOf(wordOccurrences[i].word) > -1) {
+      observedCollections.neg.push(wordOccurrences[i]);
+    }
+  }
+
+  return observedCollections
+}
+
+function generateExpected(wordOccurrences, modelKnowledge) {
+  /*
+    tengo una lista de palabras encontradas en el texto y su respectivo numero de apariciones,
+    tengo un modelo de palabras positivas,
+    tengo un modelo de palabras negativas,
+    por cada palabra del modelo positivo,
+      si la palabra se encuentra en el texto,
+        agrego a palabras esperadas positivas
+      si no,
+        continúo
+    por cada palabra del modelo negativo,
+      si se encuentra en el texto,
+        agrego a palabras negativas
+      si no,
+        continúo
+    retorno ambas listas de palabras esperadas
+  */
+  var expectedCollections = {"pos" : [] , "neg" : []};
+
+  var textWords = [];
+
+  for (var i = 0; i < wordOccurrences.length; i++) {
+    textWords.push(wordOccurrences[i].word);
+  }
+
+  for (var i = 0; i < modelKnowledge.pos.length; i++) {
+    if (textWords.indexOf(modelKnowledge.pos[i].word) > -1) {
+      expectedCollections.pos.push(modelKnowledge.pos[i]);
+    }
+  }
+
+  for (var i = 0; i < modelKnowledge.neg.length; i++) {
+    if (textWords.indexOf(modelKnowledge.neg[i].word) > -1) {
+      expectedCollections.neg.push(modelKnowledge.neg[i]);
+    }
+  }
+
+  return expectedCollections
+}
