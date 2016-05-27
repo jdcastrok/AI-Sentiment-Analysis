@@ -14,7 +14,6 @@ Recupera la colección de stopWords
         }
 */
 exports.getStopWords = function(callback){
-	console.log("stopWordsHttp");
 	var httpConfig = {
 		//"uri": "http://localhost:9000/sentimentAnalysis/v1/getCollection/",
 		"uri": "http://104.245.34.129/sentimentAnalysis/v1/getCollection/",
@@ -211,14 +210,52 @@ exports.updateLearningQueue = function(callback){
 
 
 exports.updateLogs = function(logs, typeLogs,callback){
+	console.log("TYPE: "+typeLogs);
+	console.log("-------------------------------");
+	var jsonArray = toJson(logs);
+	//console.log(jsonArray);
 	var httpConfig = {
 		//"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
 		"uri": "http://104.245.34.129/sentimentAnalysis/v1/updateCollection/",
 		"method": "PUT"
 	};
 	var httpData = {
-		"collection": JSON.stringify(typeLogs),
-		"documents": {logs}
+		"collection": JSON.stringify('p'+logs.models.nPer+'k'+logs.models.nPerToTake+typeLogs),
+		"documents": JSON.stringify([jsonArray])
 	};
-	connection.httpRequest(httpConfig, httpData, callback);
+	connection.httpRequest(httpConfig, httpData, function(response){
+		if(response.success){
+			callback({"success": true,"data": null,"message": 200});
+		}else {
+			console.log("BAD -_-");
+			console.log(response);
+			callback({"success": false,"data": null,"message": 400});
+		}
+	});
 };
+
+
+var toJson = function(info){
+	var newArray = {
+	success : info.success,
+	data : info.data,
+	message : info.message,
+
+	limitPos : info.models.limitPos,
+	limitNeg : info.models.limitNeg,
+	numPos : info.models.numPos,
+	numNeg : info.models.numNeg,
+	nPer : info.models.nPer,
+	nPerToTake : info.models.nPerToTake,
+	/*modelsPos : info.models.pos,
+	//modelsNeg : info.models.neg,
+	//historicalPos : info.historicals.pos,
+	//historicalNeg : info.historicals.neg,
+	//newWordsPos : info.newWords.pos,
+	//newWordsNeg : info.newWords.neg,
+	//stopWords : info.stopWords,*/
+	type : info.type,
+	time : info.time};
+
+	return newArray;
+}
