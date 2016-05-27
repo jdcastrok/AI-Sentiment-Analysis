@@ -95,7 +95,9 @@ Devuelve colecciones modelo. Aquellas palabras más representativas y mutuamente
   neg     //arreglo de palabras positivas con su respectivo N° de apariciones
 }
 */
-exports.generateModel = function(historicalKnowledge, callback){
+exports.generateModel = function(historicalKnowledge, nPer,nPerToTake,  callback){
+
+  console.log("\n"+ nPer +' - '+nPerToTake+"\n");
   console.log("14.Inside -> generateModel");
       //console.log("unsorted Historical\n\n");
       //console.log(require('util').inspect(historicalKnowledge, { depth: null }));
@@ -112,14 +114,14 @@ exports.generateModel = function(historicalKnowledge, callback){
                                                       "pos": [],
                                                       "neg": []
                                                 };
-      var percentilValuePos = mathService.getPercentilValue (historicalKnowledge.pos, 4, 3);                                                 //máximo de ocurrencias para de la colección positiva
+      var percentilValuePos = mathService.getPercentilValue (historicalKnowledge.pos, nPer, nPerToTake);                                                 //máximo de ocurrencias para de la colección positiva
       //console.log('console.log(maxOccur);');
       //console.log(maxOccur);
       modelKnowledge.pos = getMostRepresentativeWords(historicalKnowledge.pos, percentilValuePos.abs);//recupera palabras más representativas
       //console.log('console.log(modelKnowledge.pos);');
       //console.log(modelKnowledge.pos);
 
-      var percentilValueNeg = mathService.getPercentilValue (historicalKnowledge.neg, 4, 3)                                                   //máximo de ocurrencias para de la colección negativa
+      var percentilValueNeg = mathService.getPercentilValue (historicalKnowledge.neg, nPer, nPerToTake)                                                   //máximo de ocurrencias para de la colección negativa
       //console.log('console.log(maxOccur);');
       //console.log(maxOccur);
       modelKnowledge.neg = getMostRepresentativeWords(historicalKnowledge.neg, percentilValueNeg.abs);//recupera palabras más representativas
@@ -134,6 +136,8 @@ exports.generateModel = function(historicalKnowledge, callback){
       modelKnowledge.limitPos = percentilValuePos.limit;
       modelKnowledge.numNeg = percentilValueNeg.num;
       modelKnowledge.numPos = percentilValuePos.num;
+      modelKnowledge.nPer = nPer;
+      modelKnowledge.nPerToTake = nPerToTake;
       /////////////
 
       //console.log(modelKnowledge);
