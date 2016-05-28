@@ -15,7 +15,7 @@ Recupera la colección de stopWords
 */
 exports.getStopWords = function(callback){
 	var httpConfig = {
-		"uri": "http://localhost:9000/sentimentAnalysis/v1/getCollection/",
+		"uri": "http://ai.durancr.com/sentimentAnalysis/v1/getCollection/",
 		"method": "GET"
 	};
 	var httpData = {
@@ -56,7 +56,7 @@ exports.getKnowledgeDB = function(knowledgeType, callback){
 		"neg": []
 	};
 	var httpConfig = {
-		"uri": "http://localhost:9000/sentimentAnalysis/v1/getCollection/",
+		"uri": "http://ai.durancr.com/sentimentAnalysis/v1/getCollection/",
 		"method": "GET"
 	};
 	var httpData = {
@@ -67,7 +67,7 @@ exports.getKnowledgeDB = function(knowledgeType, callback){
 			if (res.success) {
 				knowledgeDB.pos = res.data;
 				httpConfig = {
-					"uri": "http://localhost:9000/sentimentAnalysis/v1/getCollection/",
+					"uri": "http://ai.durancr.com/sentimentAnalysis/v1/getCollection/",
 					"method": "GET"
 				};
 				httpData = {
@@ -110,7 +110,7 @@ Recupera la colección learningQueue
 */
 exports.getLearningQueue = function(callback){
 	var httpConfig = {
-		"uri": "http://localhost:9000/sentimentAnalysis/v1/getCollection/",
+		"uri": "http://ai.durancr.com/sentimentAnalysis/v1/getCollection/",
 		"method": "GET"
 	};
 	var httpData = {
@@ -141,7 +141,7 @@ Actualiza  las colecciones de conocimiento histórico o modelo
 */
 exports.updateKnowledgeDB = function(knowledgeType, knowledgeDB, callback){
 	var httpConfig = {
-		"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
+		"uri": "http://ai.durancr.com/sentimentAnalysis/v1/updateCollection/",
 		"method": "PUT"
 	};
 	var httpData = {
@@ -152,7 +152,7 @@ exports.updateKnowledgeDB = function(knowledgeType, knowledgeDB, callback){
 		function (res) {
 			if (res.success) {
 				httpConfig = {
-					"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
+					"uri": "http://ai.durancr.com/sentimentAnalysis/v1/updateCollection/",
 					"method": "PUT"
 				};
 				httpData = {
@@ -188,7 +188,7 @@ Actualiza  la colección learningQueue
 */
 exports.updateLearningQueue = function(callback){
 	var httpConfig = {
-		"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
+		"uri": "http://ai.durancr.com/sentimentAnalysis/v1/updateCollection/",
 		"method": "PUT"
 	};
 	var httpData = {
