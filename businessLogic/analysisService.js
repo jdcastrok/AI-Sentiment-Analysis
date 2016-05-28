@@ -1,6 +1,5 @@
 'use strict'
-var sentimentRepository = require('../dataAccess/sentimentRepository.js'); 
-//var analysisRepository = require('../dataAccess/analysisRepository.js'); 
+var sentimentRepository = require('../dataAccess/sentimentRepository.js');
 var utilitiesService = require('./utilitiesService.js');
 var mathService = require('./mathService.js');
 
@@ -208,7 +207,7 @@ res:{
                                                         pos, //array de distribución de frecuencias de palabras positivas en el texto: [{word, freq}, ... , {word, freq}]
                                                         neg, //array de distribución de frecuencias de palabras negativas en el texto: [{word, freq}, ... , {word, freq}]
                                                     },
-                    tableDecision  //JSON con los resultados de los análisis  individuales de cada sentimiento 
+                    tableDecision  //JSON con los resultados de los análisis  individuales de cada sentimiento
                                               {
                                                   pos, //true: el texto se comporta como texto positivo, false: el texto NO se comporta como texto positivo
                                                   neg, //true: el texto se comporta como texto negativo, false: el texto NO se comporta como texto negativo
@@ -217,6 +216,7 @@ res:{
       message //éxito: 200, fracaso:400
 }
 */
+
 
 exports.analyzeText  = function (data, callback){
   data = {};
@@ -271,4 +271,3 @@ analysisRepository.getStopWords(function (res) {
     console.log('\n\n\n\nanalysisService: getStopWords: console.log(res);');
     console.log(res);
 })*/
-

@@ -21,11 +21,11 @@ exports.getPercentilValue = function(array, nPer, nPerToTake){
     num += array[i].occur;
 
   }
- console.log('getPercentilValue: console.log(limit);');
-  console.log(limit);
-  console.log('getPercentilValue: console.log(num);');
-  console.log(num);
-  return Math.abs( (num/nPer) * nPerToTake);
+  //console.log('getPercentilValue: console.log(limit);');
+  //console.log(limit);
+  //console.log('getPercentilValue: console.log(num);');
+  //console.log(num);
+  return {'abs':Math.abs( (num/nPer) * nPerToTake),'limit':limit,'num':num,'nPer':nPer};
 };
 
 //Recibe proporción 1, proporción 2, total 1, total 2

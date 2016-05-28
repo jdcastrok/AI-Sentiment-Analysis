@@ -27,13 +27,13 @@ var filterByFrequency = function(historicalKnowledge){
 
               for (var j = 0; j < historicalKnowledge.neg.length; j++) {
                     if(historicalKnowledge.pos[i].word == historicalKnowledge.neg[j].word){
-                          console.log(historicalKnowledge.pos[i].word);
+                          //console.log(historicalKnowledge.pos[i].word);
                           positiveProportion = historicalKnowledge.pos[i].occur / totalPositiveHistoricalOccurrences;
                           negativeProportion = historicalKnowledge.neg[j].occur / totalNegativeHistoricalOccurrences;
-                          console.log('filterByFrequency: console.log(positiveProportion);');
-                          console.log(positiveProportion);
-                          console.log('filterByFrequency: console.log(negativeProportion);');
-                          console.log(negativeProportion);
+                          //console.log('filterByFrequency: console.log(positiveProportion);');
+                          //console.log(positiveProportion);
+                          //console.log('filterByFrequency: console.log(negativeProportion);');
+                          //console.log(negativeProportion);
 
                           Zobs = mathService.getZobs(positiveProportion, negativeProportion, totalPositiveHistoricalOccurrences, totalNegativeHistoricalOccurrences);
 
@@ -95,7 +95,10 @@ Devuelve colecciones modelo. Aquellas palabras más representativas y mutuamente
   neg     //arreglo de palabras positivas con su respectivo N° de apariciones
 }
 */
-exports.generateModel = function(historicalKnowledge, callback){
+exports.generateModel = function(historicalKnowledge, nPer,nPerToTake,  callback){
+
+  console.log("\n"+ nPer +' - '+nPerToTake+"\n");
+  console.log("14.Inside -> generateModel");
       //console.log("unsorted Historical\n\n");
       //console.log(require('util').inspect(historicalKnowledge, { depth: null }));
       //console.log("\n\n_______________________\n\n");
@@ -111,23 +114,31 @@ exports.generateModel = function(historicalKnowledge, callback){
                                                       "pos": [],
                                                       "neg": []
                                                 };
-      var maxOccur = 0; // máximo de ocurrencias
+      var percentilValuePos = mathService.getPercentilValue (historicalKnowledge.pos, nPer, nPerToTake);                                                 //máximo de ocurrencias para de la colección positiva
+      //console.log('console.log(maxOccur);');
+      //console.log(maxOccur);
+      modelKnowledge.pos = getMostRepresentativeWords(historicalKnowledge.pos, percentilValuePos.abs);//recupera palabras más representativas
+      //console.log('console.log(modelKnowledge.pos);');
+      //console.log(modelKnowledge.pos);
 
-      maxOccur = mathService.getPercentilValue (historicalKnowledge.pos, 4, 3);                                                 //máximo de ocurrencias para de la colección positiva
-      console.log('console.log(maxOccur);');
-      console.log(maxOccur);
-      modelKnowledge.pos = getMostRepresentativeWords(historicalKnowledge.pos, maxOccur);//recupera palabras más representativas
-      console.log('console.log(modelKnowledge.pos);');
-      console.log(modelKnowledge.pos);
+      var percentilValueNeg = mathService.getPercentilValue (historicalKnowledge.neg, nPer, nPerToTake)                                                   //máximo de ocurrencias para de la colección negativa
+      //console.log('console.log(maxOccur);');
+      //console.log(maxOccur);
+      modelKnowledge.neg = getMostRepresentativeWords(historicalKnowledge.neg, percentilValueNeg.abs);//recupera palabras más representativas
+      //console.log('console.log(modelKnowledge.neg);');
+      //console.log(modelKnowledge.neg);
 
-      maxOccur = mathService.getPercentilValue (historicalKnowledge.neg, 4, 3);                                                   //máximo de ocurrencias para de la colección negativa
-      console.log('console.log(maxOccur);');
-      console.log(maxOccur);
-      modelKnowledge.neg = getMostRepresentativeWords(historicalKnowledge.neg, maxOccur);//recupera palabras más representativas
-      console.log('console.log(modelKnowledge.neg);');
-      console.log(modelKnowledge.neg);
+      modelKnowledge = filterByFrequency(modelKnowledge);
+                         //discrimina aquellas que se repitan y tengan una frecuencia "igual"
 
-      modelKnowledge = filterByFrequency(modelKnowledge);                      //discrimina aquellas que se repitan y tengan una frecuencia "igual"
+      /////////LOGS
+      modelKnowledge.limitNeg = percentilValueNeg.limit;
+      modelKnowledge.limitPos = percentilValuePos.limit;
+      modelKnowledge.numNeg = percentilValueNeg.num;
+      modelKnowledge.numPos = percentilValuePos.num;
+      modelKnowledge.nPer = nPer;
+      modelKnowledge.nPerToTake = nPerToTake;
+      /////////////
 
       //console.log(modelKnowledge);
 

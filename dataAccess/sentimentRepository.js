@@ -15,7 +15,8 @@ Recupera la colección de stopWords
 */
 exports.getStopWords = function(callback){
 	var httpConfig = {
-		"uri": "http://ai.durancr.com/sentimentAnalysis/v1/getCollection/",
+		//"uri": "http://localhost:9000/sentimentAnalysis/v1/getCollection/",
+		"uri": "http://104.245.34.129/sentimentAnalysis/v1/getCollection/",
 		"method": "GET"
 	};
 	var httpData = {
@@ -50,13 +51,16 @@ Recupera las colecciones de conocimiento histórico o modelo
 	message: 400
         }
 */
+
 exports.getKnowledgeDB = function(knowledgeType, callback){
+	console.log("9.Inside -> getKnowledgeDB");
 	var knowledgeDB = {
 		"pos": [],
 		"neg": []
 	};
 	var httpConfig = {
-		"uri": "http://ai.durancr.com/sentimentAnalysis/v1/getCollection/",
+		//"uri": "http://localhost:9000/sentimentAnalysis/v1/getCollection/",
+		"uri": "http://104.245.34.129/sentimentAnalysis/v1/getCollection/",
 		"method": "GET"
 	};
 	var httpData = {
@@ -67,7 +71,8 @@ exports.getKnowledgeDB = function(knowledgeType, callback){
 			if (res.success) {
 				knowledgeDB.pos = res.data;
 				httpConfig = {
-					"uri": "http://ai.durancr.com/sentimentAnalysis/v1/getCollection/",
+					//"uri": "http://localhost:9000/sentimentAnalysis/v1/getCollection/",
+					"uri": "http://104.245.34.129/sentimentAnalysis/v1/getCollection/",
 					"method": "GET"
 				};
 				httpData = {
@@ -110,7 +115,8 @@ Recupera la colección learningQueue
 */
 exports.getLearningQueue = function(callback){
 	var httpConfig = {
-		"uri": "http://ai.durancr.com/sentimentAnalysis/v1/getCollection/",
+		//"uri": "http://localhost:9000/sentimentAnalysis/v1/getCollection/",
+		"uri": "http://104.245.34.129/sentimentAnalysis/v1/getCollection/",
 		"method": "GET"
 	};
 	var httpData = {
@@ -140,8 +146,10 @@ Actualiza  las colecciones de conocimiento histórico o modelo
         }
 */
 exports.updateKnowledgeDB = function(knowledgeType, knowledgeDB, callback){
+	console.log("19.Inside -> updateKnowledgeDB");
 	var httpConfig = {
-		"uri": "http://ai.durancr.com/sentimentAnalysis/v1/updateCollection/",
+		//"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
+		"uri": "http://104.245.34.129/sentimentAnalysis/v1/updateCollection/",
 		"method": "PUT"
 	};
 	var httpData = {
@@ -152,7 +160,8 @@ exports.updateKnowledgeDB = function(knowledgeType, knowledgeDB, callback){
 		function (res) {
 			if (res.success) {
 				httpConfig = {
-					"uri": "http://ai.durancr.com/sentimentAnalysis/v1/updateCollection/",
+					//"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
+					"uri": "http://104.245.34.129/sentimentAnalysis/v1/updateCollection/",
 					"method": "PUT"
 				};
 				httpData = {
@@ -188,7 +197,8 @@ Actualiza  la colección learningQueue
 */
 exports.updateLearningQueue = function(callback){
 	var httpConfig = {
-		"uri": "http://ai.durancr.com/sentimentAnalysis/v1/updateCollection/",
+		//"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
+		"uri": "http://104.245.34.129/sentimentAnalysis/v1/updateCollection/",
 		"method": "PUT"
 	};
 	var httpData = {
@@ -197,3 +207,55 @@ exports.updateLearningQueue = function(callback){
 	};
 	connection.httpRequest(httpConfig, httpData, callback);
 };
+
+
+exports.updateLogs = function(logs, typeLogs,callback){
+	console.log("TYPE: "+typeLogs);
+	console.log("-------------------------------");
+	var jsonArray = toJson(logs);
+	//console.log(jsonArray);
+	var httpConfig = {
+		//"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
+		"uri": "http://104.245.34.129/sentimentAnalysis/v1/updateCollection/",
+		"method": "PUT"
+	};
+	var httpData = {
+		"collection": JSON.stringify('p'+logs.models.nPer+'k'+logs.models.nPerToTake+typeLogs),
+		"documents": JSON.stringify([jsonArray])
+	};
+	connection.httpRequest(httpConfig, httpData, function(response){
+		if(response.success){
+			callback({"success": true,"data": null,"message": 200});
+		}else {
+			console.log("BAD -_-");
+			console.log(response);
+			callback({"success": false,"data": null,"message": 400});
+		}
+	});
+};
+
+
+var toJson = function(info){
+	var newArray = {
+	success : info.success,
+	data : info.data,
+	message : info.message,
+
+	limitPos : info.models.limitPos,
+	limitNeg : info.models.limitNeg,
+	numPos : info.models.numPos,
+	numNeg : info.models.numNeg,
+	nPer : info.models.nPer,
+	nPerToTake : info.models.nPerToTake,
+	/*modelsPos : info.models.pos,
+	//modelsNeg : info.models.neg,
+	//historicalPos : info.historicals.pos,
+	//historicalNeg : info.historicals.neg,
+	//newWordsPos : info.newWords.pos,
+	//newWordsNeg : info.newWords.neg,
+	//stopWords : info.stopWords,*/
+	type : info.type,
+	time : info.time};
+
+	return newArray;
+}

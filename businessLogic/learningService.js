@@ -23,9 +23,10 @@ var genModel = require('./genModelLearningService.js');
 //        }
 //      ] | null
 //  }
-exports.learn = function (request, callback) {
+exports.learn = function (request, nPer,nPerToTake, callback) {
+  console.log("1.Inside -> Learn");
   if (request.type == "auto") {
-    autonomousLearn(function (response) {
+    autonomousLearn(nPer,nPerToTake,function (response) {
       if (response.success) {
         //se realizó exitosamente el aprendizaje
       } else {
@@ -34,10 +35,36 @@ exports.learn = function (request, callback) {
       }
     });
   } else if (request.type == "controlled") {
-    controlledLearn(request.data, function (response) {
+    console.log("2.Call -> Controlled");
+    controlledLearn(request.data, nPer,nPerToTake, function (response) {
       if (response.success) {
         //exito
-        callback(response);
+        //////////////////////////////////////////////////////////LOGS
+        var today = new Date();
+        today = today.getTime();
+
+        response.type = request.type;
+        response.time = today;
+
+
+        ////LOGS
+        console.log("23.Call logs");
+        ////
+        updateLogs(response, response.type,function(res){
+          console.log("24.Inside logs");
+          if(res.success){
+            console.log("25.1 logs");
+            callback(res);
+          }else {
+            console.log("25.2 logs");
+            res.data = "Logs db error!";
+            res.message = 1044;
+            callback(res);
+          }
+        });
+
+        ///////////////////////////////////////////////////////////////
+        //callback(response);
       } else {
         //fracaso
         callback(response);
@@ -54,7 +81,7 @@ exports.learn = function (request, callback) {
 //clasifies its words into the respective sentiment
 //when all words are grouped by sentiment
 //call the next common steps and waits for the response
-function autonomousLearn(callback) {
+function autonomousLearn(nPer,nPerToTake,callback) {
   //debería bloquearse la BD
 
   dataAccess.getLearningQueue (function (response) {
@@ -75,12 +102,12 @@ function autonomousLearn(callback) {
       }
 
       //calls the next steps (common to both types of learning)
-      commonLearning(sentimentWords, function (response) {
+      commonLearning(sentimentWords, nPer,nPerToTake, function (response) {
         if (response.success) {
           //todo bien
           //vacío la colección learningQueue
           dataAccess.updateLearningQueue(function (response) {
-            console.log(response);
+            //console.log(response);
             if (response.success) {
               //se limpió con éxito
               callback(response);
@@ -108,21 +135,31 @@ function autonomousLearn(callback) {
 //poco representaivas (stopwords), se cuenta el número de apariciones para cada palabra distinta
 //finalmente se agrupan las palabras de todos los textos por sentiemiento,
 //según lo indique la llave "sent"
-function controlledLearn(request, callback) {
+function controlledLearn(request, nPer, nPerToTake, callback) {
+  console.log("3.Inside Controlled Learning");
   var textsArray = request.data;
   //debería hacerse un lock a la BDtrue
   //dataAccessTest.lockLearningProcess(function (response) {
 
   //get the stopwords from database
   dataAccess.getStopWords(function (response) {
+    console.log("4.Response -> getStopWords");
     if (response.success) {
       //las stopwords se obtuvieron con exito
       //tokenizo, agrupo palabras y separo por sentimiento
-      var sentimentWords = getWordsPerSentiment(response.data, request);
+
+      ////// LOGS
+      console.log("5.Call -> getWordsPerSentiment");
+      //////
+
+      var stopWords = response.data;
+      var sentimentWords = getWordsPerSentiment(stopWords, request);
       //calls the next steps (common to both types of learning)
-      commonLearning(sentimentWords, function (response) {
+      console.log("6.Call -> commonLearning");
+      commonLearning(sentimentWords, nPer,nPerToTake, function (response) {
         if (response.success) {
           //todo bien
+          response.stopWords = stopWords;
           callback(response);
         } else {
           //todo mal
@@ -141,23 +178,40 @@ function controlledLearn(request, callback) {
 //generates both model collections
 //updates all collections on DB
 //asserts if everything went OK and unlocks the DB
-function commonLearning(newWords, callback) {
+function commonLearning(newWords,nPer,nPerToTake, callback) {
+
+  ////// LOGS
+  console.log("7.Inside -> commonLearning");
+  console.log("8.Call -> getKnowledgeDB");
+//////
+
   //obtengo la colección histórica
+
   dataAccess.getKnowledgeDB("Historical", function (response) {
+    console.log("10.Response -> getKnowledgeDB");
     if (response.success) {
       // se obtuvieron las colecciones históricas
       // se actualizan las colecciones históricas con las palabras recientemente categorizadas
+      console.log("11.Call -> updateHistoricals");
       var historicals = updateHistoricals(response.data, newWords);
       //se generan las colecciones modelo
-      genModel.generateModel(historicals, function (response) {
-        //console.log(response);
+      console.log("13.Call -> generateModel");
+      genModel.generateModel(historicals, nPer,nPerToTake,  function (response) {
+        console.log("15.Response -> generateModel");
         if (response.success) {
           //las colecciones modelo se generaron correctamente
           //se busca actualizar ambas
+          console.log("16.Call -> updateDB");
           updateDB(historicals, response.data, function (response) {
-            console.log(response);
+            console.log("22.Response -> updateDB");
+            //console.log(response);
             if (response.success) {
               //se actualizaron exitosamente las colecciones
+
+              ////LOGS
+              response.newWords = newWords;
+              ///////
+
               callback(response);
             } else {
               //en cada uno de los else debería levantarse el bloqueo sobre la BD
@@ -195,6 +249,7 @@ function getWordsPerSentiment(stopWords, texts) {
 
 //actualiza ambas colecciones con las nuevas palabras
 function updateHistoricals(historicals, newWords) {
+  console.log("12.Inside -> updateHistoricals");
   historicals.pos = updateCollection(historicals.pos, newWords.pos);
   historicals.neg = updateCollection(historicals.neg, newWords.neg);
 
@@ -223,15 +278,43 @@ function updateCollection(collection, newWords) {
 
 //recibe las colecciones históricas y modelo para enviarlas a la BD y que se actualicen
 function updateDB(historicals, models, callback) {
+  console.log("17.Inside -> updateDB");
+  console.log("18.Call -> updateKnowledgeDB HISTORICAL");
   dataAccess.updateKnowledgeDB("Historical", historicals, function (response) {
+
+    ////// LOGS
+    console.log("20.Response -> updateKnowledgeDB HISTORICAL");
+    //////
+
     if (response.success) {
       //si se pudo actualizar las colecciones históricas
+      console.log("21.Call -> updateKnowledgeDB MODEL");
       dataAccess.updateKnowledgeDB("Model", models, function (response) {
+
+        ////// LOGS
+        console.log("21.1.Response -> updateKnowledgeDB MODEL");
+        //console.log(response);
+        response.models = models;
+        response.historicals = historicals;
+
         //ambas se insertaron exitosamente
         callback(response);
       });
     } else {
+      console.log("21.2.Response -> updateKnowledgeDB MODEL");
+      //console.log(response);
       callback(response);
     }
+  });
+}
+
+
+function updateLogs(data, typeLogs, callback){
+  dataAccess.updateLogs(data, typeLogs,function(response){
+    if(response.success){
+			callback({"success": true,"data": null,"message": 200});
+		}else {
+			callback({"success": false,"data": null,"message": 400});
+		}
   });
 }
