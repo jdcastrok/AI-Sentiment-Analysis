@@ -1,6 +1,7 @@
 'use strict'
 
 var controlled = require('./learningService.js');
+var autonomous = require('./learningService.js');
 //var autonomous = require('./autonomousLearningService.js');
 var genModel = require('./genModelLearningService.js');
 
@@ -8,6 +9,9 @@ var genModel = require('./genModelLearningService.js');
 
 var fs = require('fs');
 
+
+
+/*
 fs.readFile("./positivo.txt", 'utf8', function (err, data) {
   if (err) {
     console.log(err);
@@ -40,7 +44,28 @@ fs.readFile("./positivo.txt", 'utf8', function (err, data) {
       }
     });
   }
+});*/
+
+
+
+
+
+autonomous.learn({"type":"auto"},4, 3, function(response){
+  if (response.success) {
+    console.log("bien")
+  }
+  else {
+    console.log("mal");
+  }
+
 });
+
+
+
+
+
+
+
 
 /*var foo =*/ /*controlled.learn(
   //texts*/

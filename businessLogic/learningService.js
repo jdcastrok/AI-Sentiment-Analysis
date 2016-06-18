@@ -26,9 +26,11 @@ var genModel = require('./genModelLearningService.js');
 exports.learn = function (request, nPer,nPerToTake, callback) {
   console.log("1.Inside -> Learn");
   if (request.type == "auto") {
+    console.log("2.Call -> AutonomousLearn");
     autonomousLearn(nPer,nPerToTake,function (response) {
       if (response.success) {
         //se realizó exitosamente el aprendizaje
+        callback(response);
       } else {
         //error
         callback(response);
@@ -82,30 +84,38 @@ exports.learn = function (request, nPer,nPerToTake, callback) {
 //when all words are grouped by sentiment
 //call the next common steps and waits for the response
 function autonomousLearn(nPer,nPerToTake,callback) {
+  console.log("3.Inside -> AutonomousLearn");
   //debería bloquearse la BD
-
+console.log("4.Call -> getLearningQueue");
   dataAccess.getLearningQueue (function (response) {
+    console.log("5.Inside -> getLearningQueue");
+
     //se obtienen las palabras por aprender
     if (response.success) {
       var sentimentWords = {"neg" : [], "pos" : []};
 
+      console.log("5.1 Success -> getLearningQueue");
       //se itera sobre los resultados de análisis
       for (var i = 0; i < response.data.length; i++) {
         //si el sentimento del análisis es neg o pos
         if (response.data[i].sent == "neg") {
+          console.log("5.2 getLearningQueue NEGATIVE");
           //agrupa las palabras del análisis con las positivas
           sentimentWords.neg = utilitiesService.groupBySentiment(sentimentWords.neg, response.data[i].words);
         } else {
+          console.log("5.2 getLearningQueue POSITIVE");
           //agrupa con las negativas
           sentimentWords.pos = utilitiesService.groupBySentiment(sentimentWords.pos, response.data[i].words);
         }
       }
 
+      console.log("6.Call -> commonLearning");
       //calls the next steps (common to both types of learning)
       commonLearning(sentimentWords, nPer,nPerToTake, function (response) {
         if (response.success) {
           //todo bien
           //vacío la colección learningQueue
+          console.log("Call UpdateLearningQueue");
           dataAccess.updateLearningQueue(function (response) {
             //console.log(response);
             if (response.success) {
