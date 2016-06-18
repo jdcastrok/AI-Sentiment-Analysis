@@ -202,10 +202,18 @@ exports.updateLearningQueue = function(callback){
 		"method": "PUT"
 	};
 	var httpData = {
-		"collection": JSON.stringify("learninQueue"),
-		"documents": {}
+		"collection": JSON.stringify("learningQueue"),
+		"documents": JSON.stringify([])
 	};
-	connection.httpRequest(httpConfig, httpData, callback);
+	connection.httpRequest(httpConfig, httpData, function(response){
+		if(response.success){
+			callback({"success": true,"data": null,"message": 200});
+		}else {
+			console.log("BAD -_-");
+			console.log(response);
+			callback({"success": false,"data": null,"message": 400});
+		}
+	});
 };
 
 

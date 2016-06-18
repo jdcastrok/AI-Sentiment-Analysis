@@ -95,6 +95,7 @@ console.log("4.Call -> getLearningQueue");
       var sentimentWords = {"neg" : [], "pos" : []};
 
       console.log("5.1 Success -> getLearningQueue");
+      console.log(response);
       //se itera sobre los resultados de análisis
       for (var i = 0; i < response.data.length; i++) {
         //si el sentimento del análisis es neg o pos
