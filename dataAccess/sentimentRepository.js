@@ -197,7 +197,7 @@ Actualiza  la colección learningQueue
 */
 exports.updateLearningQueue = function(callback){
 	var httpConfig = {
-		"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
+		"uri": "http://localhost:9000/sentimentAnalysis/v1/replaceCollection/",
 		//"uri": "http://104.245.34.129/sentimentAnalysis/v1/updateCollection/",
 		"method": "PUT"
 	};
