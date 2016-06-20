@@ -9,7 +9,9 @@ var genModel = require('./genModelLearningService.js');
 
 var fs = require('fs');
 
-
+//controlled.learn({"type" : "auto", "data" : null}, 4, 3, function (response) {
+//  console.log(require('util').inspect(response, { depth: null }));
+//});
 
 /*
 fs.readFile("./positivo.txt", 'utf8', function (err, data) {
@@ -44,10 +46,9 @@ fs.readFile("./positivo.txt", 'utf8', function (err, data) {
       }
     });
   }
-});*/
+});
 
-
-
+*/
 
 
 autonomous.learn({"type":"auto"},4, 3, function(response){
@@ -90,7 +91,7 @@ autonomous.learn({"type":"auto"},4, 3, function(response){
 //  }
 //});
 
-
+/*
 [
   {
     "sent" : "pos", "words" :
@@ -136,7 +137,7 @@ autonomous.learn({"type":"auto"},4, 3, function(response){
     ]
   }
 ]
-
+*/
 
 
 
