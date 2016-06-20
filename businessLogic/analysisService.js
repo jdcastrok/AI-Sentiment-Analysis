@@ -219,6 +219,15 @@ res:{
 
 
 exports.analyzeText  = function (data, callback){
+    console.log(data);
+      callback({
+            success: true,
+            data: [{
+                  info: 'aquí van todos los JSONs listados de los resultados de los análisis de cada texto'
+            }],
+          message: 200
+      });
+    return;
   data = {};
       data.texts = ["buenos dias a todos mis amigos"];
       sentimentRepository.getStopWords(function (res) {
