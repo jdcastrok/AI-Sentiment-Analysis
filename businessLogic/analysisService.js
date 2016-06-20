@@ -115,11 +115,11 @@ var chiSquaredTest = function(fExpected, fObserved) {
 
 var getFinalDecision = function (posRes, negRes) {
       if ((posRes && negRes) || (!posRes && !negRes)){
-            return 'neutral';
+            return 'Neutral';
       } else if (posRes) {
-            return 'positive';
+            return 'Positive';
       } else {
-            return 'negative';
+            return 'Negative';
       }
 }
 
@@ -301,11 +301,11 @@ exports.analyzeText  = function (data, nPer, nPerToTake, alpha, callback){
                                     //se agregan las nuevas
                                     for (var i = 0; i < analysisArray.length; i++) {
                                       //console.log(require('util').inspect(analysisArray, { depth: null }));
-                                      if (analysisArray[i].sentiment == 'neutral') {
+                                      if (analysisArray[i].sentiment == 'Neutral') {
                                         continue;
-                                      } else if (analysisArray[i].sentiment == 'positive') {
+                                      } else if (analysisArray[i].sentiment == 'Positive') {
                                         learningQueue.push({"sent" : "pos", "words" : analysisArray[i].occurrences});
-                                      } else if (analysisArray[i].sentiment == 'negative') {
+                                      } else if (analysisArray[i].sentiment == 'Negative') {
                                         learningQueue.push({"sent" : "neg", "words" : analysisArray[i].occurrences});
                                       } else {
                                         //???
