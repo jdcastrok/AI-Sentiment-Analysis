@@ -262,8 +262,8 @@ res:{
 
 
 exports.analyzeText  = function (data, callback){
-  data = {};
-      data.texts = ["life earth millions","out breakup apologize","life earth millions out breakup apologize"];
+  //data = {};
+      //data.texts = ["life earth millions","out breakup apologize","life earth millions out breakup apologize"];
       sentimentRepository.getStopWords(function (res) {
             if (res.success) {
               var stopWords = res.data;
