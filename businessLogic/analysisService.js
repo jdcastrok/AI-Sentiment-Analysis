@@ -249,19 +249,14 @@ res:{
                                                     {
                                                         pos, //array de distribución de frecuencias de palabras positivas en el texto: [{word, freq}, ... , {word, freq}]
                                                         neg, //array de distribución de frecuencias de palabras negativas en el texto: [{word, freq}, ... , {word, freq}]
-                                                    },
-                    tableDecision  //JSON con los resultados de los análisis  individuales de cada sentimiento
-                                              {
-                                                  pos, //true: el texto se comporta como texto positivo, false: el texto NO se comporta como texto positivo
-                                                  neg, //true: el texto se comporta como texto negativo, false: el texto NO se comporta como texto negativo
-                                              }
+                                                    }
               }, ...., {...}],
       message //éxito: 200, fracaso:400
 }
 */
 
 
-exports.analyzeText  = function (data, callback){
+exports.analyzeText  = function (data, nPer, nPerToTake, alpha, callback){
   //data = {};
       //data.texts = ["life earth millions","out breakup apologize","life earth millions out breakup apologize"];
       sentimentRepository.getStopWords(function (res) {
@@ -287,6 +282,8 @@ exports.analyzeText  = function (data, callback){
                                       //console.log(require('util').inspect(modelKnowledge, { depth: null }));
                                       //console.log("model len: " + modelKnowledge.length);
                                       analysis = analysisEngine(fExpected, modelKnowledge, stopWords, data.texts[i]);
+                                      analysis.alpha = alpha;
+                                      analysis.kCategories = nPerToTake;
                                       analysisArray.push(analysis);
                                       console.log('\n\n\n\nanalyzeText: console.log(analysis);');
                                       console.log(analysis);
@@ -367,6 +364,6 @@ exports.analyzeText  = function (data, callback){
       });
 };
 
-exports.analyzeText({},function (response) {
-  console.log(require('util').inspect(response, { depth: null }));
-});
+//exports.analyzeText({"texts" : ["life earth millions","out breakup apologize","life earth millions out breakup apologize"]}, 4, 3, 0.05, function (response) {
+//  console.log(require('util').inspect(response, { depth: null }));
+//});
