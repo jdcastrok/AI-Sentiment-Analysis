@@ -97,6 +97,37 @@ console.log("4.Call -> getLearningQueue");
       console.log("5.1 Success -> getLearningQueue");
       console.log(response);
       //se itera sobre los resultados de análisis
+      //response.data = [
+      //                  {
+      //                    "sent":"pos",
+      //                    "words":[
+      //                              {
+      //                                "word":"hola",
+      //                                "occur":3
+      //                              },
+      //                              {
+      //                                "word":"adios",
+      //                                "occur":1
+      //                              },
+      //                              ...
+      //                            ]
+      //                  },
+      //                  {
+      //                    "sent":"neg",
+      //                    "words":[
+      //                              {
+      //                                "word":"hello",
+      //                                "occur":5
+      //                              },
+      //                              {
+      //                                "word":"bye",
+      //                                "occur":2
+      //                              },
+      //                              ...
+      //                            ]
+      //                  },
+      //                  ...
+      //                ]
       for (var i = 0; i < response.data.length; i++) {
         //si el sentimento del análisis es neg o pos
         if (response.data[i].sent == "neg") {
@@ -117,7 +148,7 @@ console.log("4.Call -> getLearningQueue");
           //todo bien
           //vacío la colección learningQueue
           console.log("Call UpdateLearningQueue");
-          dataAccess.updateLearningQueue(function (response) {
+          dataAccess.deleteLearningQueue(function (response) {
             //console.log(response);
             if (response.success) {
               //se limpió con éxito

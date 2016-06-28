@@ -22,7 +22,16 @@ exports.getStopWords = function(callback){
 	var httpData = {
 		"collection": JSON.stringify("stopWords")
 	};
-	connection.httpRequest(httpConfig, httpData, callback);
+	connection.httpRequest(httpConfig, httpData, function (response) {
+		if (response.data.length > 0) {
+			callback(response);
+		} else {
+			console.log(require('util').inspect(response, { depth: null }));
+			console.log("No se encontraron stopwords");
+			response.success = false;
+			callback(response);
+		}
+	});
 };
 
 
@@ -125,6 +134,30 @@ exports.getLearningQueue = function(callback){
 	connection.httpRequest(httpConfig, httpData, callback);
 };
 
+/*
+Recupera la colección learningQueue
+  Entrada:
+        callback //función a ejecutar tan pronto se tenga una respuesta
+  Salida:
+  	JSON que será recibido por el callback. Ejemplo: callback(respuesta)
+        {
+	success   // éxito: true, fracaso: false
+	data        // éxito: array con los documentos de la collección, fracaso: null
+	message // éxito: 200, fracaso: 400
+        }
+*/
+
+exports.getAnalisysStatistics = function(callback){
+	var httpConfig = {
+		"uri": "http://localhost:9000/sentimentAnalysis/v1/getCollection/",
+		//"uri": "http://104.245.34.129/sentimentAnalysis/v1/getCollection/",
+		"method": "GET"
+	};
+	var httpData = {
+		"collection": JSON.stringify("analysisStatistics")
+	};
+	connection.httpRequest(httpConfig, httpData, callback);
+};
 
 /*
 Actualiza  las colecciones de conocimiento histórico o modelo
@@ -195,10 +228,31 @@ Actualiza  la colección learningQueue
 	message // éxito: 200, fracaso: 400
         }
 */
-exports.updateLearningQueue = function(callback){
+exports.updateLearningQueue = function(data, callback){
+	var httpConfig = {
+		//"uri": "http://localhost:9000/sentimentAnalysis/v1/replaceCollection/",
+		"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
+		"method": "PUT"
+	};
+	var httpData = {
+		"collection": JSON.stringify("learningQueue"),
+		"documents": JSON.stringify(data)
+	};
+	connection.httpRequest(httpConfig, httpData, function(response){
+		if(response.success){
+			callback({"success": true,"data": null,"message": 200});
+		}else {
+			console.log("BAD -_-");
+			console.log(response);
+			callback({"success": false,"data": null,"message": 400});
+		}
+	});
+};
+
+exports.deleteLearningQueue = function(callback){
 	var httpConfig = {
 		"uri": "http://localhost:9000/sentimentAnalysis/v1/replaceCollection/",
-		//"uri": "http://104.245.34.129/sentimentAnalysis/v1/updateCollection/",
+		//"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
 		"method": "PUT"
 	};
 	var httpData = {
@@ -216,6 +270,39 @@ exports.updateLearningQueue = function(callback){
 	});
 };
 
+
+/*
+Actualiza  la colección learningQueue
+  Entrada:
+        callback //función a ejecutar tan pronto se tenga una respuesta
+  Salida:
+  	JSON que será recibido por el callback. Ejemplo: callback(respuesta)
+        {
+	success   // éxito: true, fracaso: false
+	data        // éxito: null, fracaso: null
+	message // éxito: 200, fracaso: 400
+        }
+*/
+exports.updateAnalisysStatistics = function(data, callback){
+	var httpConfig = {
+		//"uri": "http://localhost:9000/sentimentAnalysis/v1/replaceCollection/",
+		"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
+		"method": "PUT"
+	};
+	var httpData = {
+		"collection": JSON.stringify("analysisStatistics"),
+		"documents": JSON.stringify(data)
+	};
+	connection.httpRequest(httpConfig, httpData, function(response){
+		if(response.success){
+			callback({"success": true,"data": null,"message": 200});
+		}else {
+			console.log("BAD -_-");
+			console.log(response);
+			callback({"success": false,"data": null,"message": 400});
+		}
+	});
+};
 
 exports.updateLogs = function(logs, typeLogs,callback){
 	console.log("TYPE: "+typeLogs);
