@@ -5,7 +5,7 @@ var analysisController = require('./controllers/analysisController.js');
 var express       = require('express'),
       app              = express(),
       server          = require('http').createServer(app),
-      port              = 80;
+      port              = 3001;
 //-------------------------------------------------------------------------
 
 app.use(bodyParser.urlencoded({ extended: false }));

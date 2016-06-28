@@ -364,6 +364,6 @@ exports.analyzeText  = function (data, nPer, nPerToTake, alpha, callback){
       });
 };
 
-//exports.analyzeText({"texts" : ["life earth millions","out breakup apologize","life earth millions out breakup apologize"]}, 4, 3, 0.05, function (response) {
-//  console.log(require('util').inspect(response, { depth: null }));
-//});
+exports.analyzeText({"texts" : ["life earth millions","out breakup apologize","life earth millions out breakup apologize"]}, 4, 3, 0.05, function (response) {
+  console.log(require('util').inspect(response, { depth: null }));
+});
