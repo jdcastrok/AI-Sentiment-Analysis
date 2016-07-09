@@ -310,9 +310,9 @@ exports.updateLogs = function(logs, typeLogs,callback){
 	var jsonArray = toJson(logs);
 	//console.log(jsonArray);
 	var httpConfig = {
-		"uri": "http://localhost:9000/sentimentAnalysis/v1/updateCollection/",
+		"uri": "http://localhost:9000/sentimentAnalysis/v1/insertCollection/",
 		//"uri": "http://104.245.34.129/sentimentAnalysis/v1/updateCollection/",
-		"method": "PUT"
+		"method": "POST"
 	};
 	var httpData = {
 		"collection": JSON.stringify('p'+logs.models.nPer+'k'+logs.models.nPerToTake+typeLogs),
